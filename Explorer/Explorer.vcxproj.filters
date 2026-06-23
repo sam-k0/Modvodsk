@@ -94,5 +94,8 @@
     <ClInclude Include="source\Features\ImGui\ImGuiFeature.h">
       <Filter>Header Files\features</Filter>
     </ClInclude>
+    <ClInclude Include="source\Features\ImGui\VarInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

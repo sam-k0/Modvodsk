@@ -11,7 +11,7 @@ void FrameCallback(FWFrame& FrameContext)
 {
 	UNREFERENCED_PARAMETER(FrameContext);
 
-	FeatureImGui::ImGuiRoutine(FrameContext, g_ModuleInterface);
+	FeatureImGui::ImGuiRoutine(FrameContext);
 }
 
 void ExecuteItCallback(FWCodeEvent& CodeContext)
@@ -57,6 +57,8 @@ EXPORTED AurieStatus ModuleInitialize(
 		return AURIE_MODULE_DEPENDENCY_NOT_RESOLVED;
 
 	g_ModuleInterface->Print(CM_LIGHTGREEN, "[Explorer] Loaded!");
+
+	FeatureImGui::Interface = g_ModuleInterface;
 
 	last_status = g_ModuleInterface->CreateCallback(
 		Module,

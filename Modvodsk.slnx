@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Explorer/Explorer.vcxproj" />
+  <Project Path="Explorer/Explorer.vcxproj" Id="3c93f64d-c18c-43cf-b43a-699e5f640adb" />
 </Solution>
