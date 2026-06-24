@@ -4,6 +4,8 @@
 
 using namespace Aurie;
 using namespace YYTK;
+using namespace ImGuiFeature;
+using namespace VariablesFeatures;
 
 static YYTKInterface* g_ModuleInterface = nullptr;
 
@@ -59,6 +61,7 @@ EXPORTED AurieStatus ModuleInitialize(
 	g_ModuleInterface->Print(CM_LIGHTGREEN, "[Explorer] Loaded!");
 
 	FeatureImGui::Interface = g_ModuleInterface;
+	FeatureVariables::Interface = g_ModuleInterface;
 
 	last_status = g_ModuleInterface->CreateCallback(
 		Module,

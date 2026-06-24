@@ -150,6 +150,7 @@
     <ClCompile Include="include\YYToolkit\YYTK_Shared_Types.cpp" />
     <ClCompile Include="source\Features\ImGui\ImGuiFeature.cpp" />
     <ClCompile Include="source\ModuleMain.cpp" />
+    <ClCompile Include="source\Features\Variables\VariablesFeature.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Features\ImGui\ImGuiFeature.h" />
@@ -167,7 +168,8 @@
     <ClInclude Include="include\YYToolkit\YYTK_Shared_Base.hpp" />
     <ClInclude Include="include\YYToolkit\YYTK_Shared_Interface.hpp" />
     <ClInclude Include="include\YYToolkit\YYTK_Shared_Types.hpp" />
-    <ClInclude Include="source\Features\ImGui\VarInfo.h" />
+    <ClInclude Include="source\Features\Variables\VarInfo.h" />
+    <ClInclude Include="source\Features\Variables\VariablesFeature.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -47,6 +47,9 @@
     <ClCompile Include="source\Features\ImGui\ImGuiFeature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\Features\Variables\VariablesFeature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Aurie\shared.hpp">
@@ -94,7 +97,10 @@
     <ClInclude Include="source\Features\ImGui\ImGuiFeature.h">
       <Filter>Header Files\features</Filter>
     </ClInclude>
-    <ClInclude Include="source\Features\ImGui\VarInfo.h">
+    <ClInclude Include="source\Features\Variables\VarInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Features\Variables\VariablesFeature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

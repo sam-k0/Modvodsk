@@ -1,7 +1,9 @@
 #include "ImGuiFeature.h"
+#include <format>
 using namespace Aurie;
 using namespace YYTK;
-
+using namespace ImGuiFeature;
+using namespace VariablesFeatures;
 
 LRESULT CALLBACK MyWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -47,7 +49,7 @@ void FeatureImGui::ImGuiRoutine(FWFrame& FrameContext)
             }
 
             g_ImGuiInited = true;
-            Interface->PrintInfo("IMGUI READY");
+            Interface->PrintInfo("ImGui initialized.");
         }
     }
     else // Every frame
@@ -64,39 +66,49 @@ void FeatureImGui::ImGuiRoutine(FWFrame& FrameContext)
     }
 }
 
-
 void FeatureImGui::DrawGlobalVariableExplorer()
 {
     ImGui::Begin("Global Variable Explorer");
 
+    ImGui::InputText("Filter Name", ImGuiFeature::g_GlobalVariableNameFilter, sizeof(ImGuiFeature::g_GlobalVariableNameFilter));
+    ImGui::InputText("Filter Type", ImGuiFeature::g_GlobalVariableTypeNameFilter, sizeof(ImGuiFeature::g_GlobalVariableTypeNameFilter));
+    ImGui::InputText("Filter Value", ImGuiFeature::g_GlobalVariableValueFilter, sizeof(ImGuiFeature::g_GlobalVariableValueFilter));
+
+
     if (ImGui::Button("Refresh"))
     {
-        g_GlobalVariables = FeatureImGui::GetInstanceVariables(-5);
+        g_GlobalVariables = FeatureVariables::GetInstanceVariables(-5);
+        // filter list with filters
+        std::vector<VarInfo> temp;
+        for (auto var : g_GlobalVariables)
+        {
+            if(
+                var.name.ToString().contains(g_GlobalVariableNameFilter) &&
+                var.value.GetKindName().contains(g_GlobalVariableTypeNameFilter) &&
+                var.value.ToString().contains(g_GlobalVariableValueFilter)
+            )
+            {
+                temp.push_back(var);
+            }
+        }
+        g_GlobalVariables = temp;
     }
-    ImGui::BeginChild("scroll_region", ImVec2(0, 0), true);
-    
+    ImGui::BeginChild("scroll_region", ImVec2(0, 0), true, ImGuiWindowFlags_HorizontalScrollbar);
+
+    int id = 0;
+    std::string valPreview, valString;
+
     for (const auto& var : g_GlobalVariables)
     {
-        ImGui::Text("%s (%s): %s", var.name.ToCString(), var.value.GetKindName().c_str(), var.value.ToCString());
+        valString = var.value.ToString();
+        valPreview = valString.substr(0, 8) + ((valString.length() > 8) ? "..." : "");
+        if (ImGui::CollapsingHeader(std::format("{} ({}): {}##{}", var.name.ToCString(), var.value.GetKindName().c_str(), valPreview , id).c_str()))
+        {
+            ImGui::Text("%s", var.value.ToCString());
+        }
     }
-
 
     ImGui::EndChild();
     ImGui::End();
 }
 
-std::vector<VarInfo> FeatureImGui::GetInstanceVariables(int instanceId)
-{
-    RValue instanceVarNames = Interface->CallBuiltin("variable_instance_get_names", { instanceId });
-    RValue cnt = Interface->CallBuiltin("array_length", { instanceVarNames });
-    std::vector<VarInfo> varNames;
-
-    for (int i = 0; i < cnt.ToInt64(); ++i)
-    {
-        RValue varName = Interface->CallBuiltin("array_get", { instanceVarNames, i });
-        // also get the value
-        RValue varVal = Interface->CallBuiltin("variable_instance_get", { instanceId, varName });
-        varNames.push_back(VarInfo(varName, varVal));
-    }
-    return varNames;
-}
