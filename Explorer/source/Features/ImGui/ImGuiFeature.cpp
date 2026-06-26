@@ -58,9 +58,14 @@ void FeatureImGui::ImGuiRoutine(FWFrame& FrameContext)
         ImGui_ImplDX11_NewFrame();
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
-           
+        
+        // Global var exp
         DrawGlobalVariableExplorer();
 
+        // inst var
+        DrawInstanceVariableExplorer();
+
+        // run cmd
         DrawRunCommand();
 
         ImGui::Render();
@@ -110,6 +115,50 @@ void FeatureImGui::DrawGlobalVariableExplorer()
             ImGui::Text("%s", var.value.ToCString());
         }
     }
+
+    ImGui::EndChild();
+    ImGui::End();
+}
+
+void ImGuiFeature::FeatureImGui::DrawInstanceVariableExplorer()
+{
+    ImGui::Begin("Instance Variable Explorer");
+
+    if (ImGui::Button("Refresh"))
+    {
+        g_InstanceVariables = FeatureVariables::GetAllInstanceVariables();
+        Interface->PrintInfo(std::to_string(g_InstanceVariables.size()));
+    }
+
+    ImGui::BeginChild("scroll_region", ImVec2(0, 0), true, ImGuiWindowFlags_HorizontalScrollbar);
+    
+    for (auto instance : g_InstanceVariables) 
+    {
+        // Each instance
+        if (ImGui::CollapsingHeader(std::to_string(instance.first).c_str()))
+        {
+            ImGui::BeginChild(std::format("var_scroll##{}",instance.first).c_str(), ImVec2(0, 0), true, ImGuiWindowFlags_HorizontalScrollbar);
+            // each variable
+            if (!Interface->CallBuiltin("instance_exists", {instance.first})){
+                continue;
+            }
+
+            std::string valString, valPreview;
+            int lbl_i = 0;
+            for (const auto& var : instance.second)
+            {
+                valString = var.value.ToString();
+                valPreview = valString.substr(0, 8) + ((valString.length() > 8) ? "..." : "");
+                if (ImGui::CollapsingHeader(std::format("{} ({}): {}##{}", var.name.ToCString(), var.value.GetKindName().c_str(), valPreview, lbl_i).c_str()))
+                {
+                    ImGui::Text("%s", var.value.ToCString());
+                }
+                ++lbl_i;
+            }
+            ImGui::EndChild();
+        }
+    }
+
 
     ImGui::EndChild();
     ImGui::End();

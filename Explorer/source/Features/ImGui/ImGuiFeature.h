@@ -31,6 +31,7 @@ namespace ImGuiFeature {
 	static bool g_ImGuiInited = false;
 	static std::vector<VarInfo> g_GlobalVariables;
 	static std::deque<std::string> g_CommandHistory;
+	static std::map<double, std::vector<VarInfo>> g_InstanceVariables;
 
 	// Input buffers
 	static char g_GlobalVariableNameFilter[256] = "";
@@ -46,6 +47,8 @@ namespace ImGuiFeature {
 		static void ImGuiRoutine(FWFrame& FrameContext);
 
 		static void DrawGlobalVariableExplorer();
+
+		static void DrawInstanceVariableExplorer();
 
 		static void DrawRunCommand();
 

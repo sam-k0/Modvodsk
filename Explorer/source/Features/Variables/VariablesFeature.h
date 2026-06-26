@@ -13,6 +13,10 @@ namespace VariablesFeatures {
 		static YYTKInterface* Interface;
 
 		static std::vector<VarInfo> GetInstanceVariables(int instanceId);
+
+		static std::vector<double> GetAllInstanceIds();
+
+		static std::map<double, std::vector<VarInfo>> GetAllInstanceVariables();
 	};
 
 
